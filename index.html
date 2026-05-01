@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+<title>KRT系列一服-中世纪国战</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
+body{
+background:linear-gradient(160deg,#020208 0%,#09081b 40%,#100e29 70%,#0b0a1f 100%);
+color:#e0e0ff;
+min-height:100vh;
+overflow-x:hidden;
+position:relative;
+}
+.bg-layer-1,.bg-layer-2,.bg-layer-3{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+pointer-events:none;
+z-index:-1;
+}
+.bg-layer-1{
+background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236a5acd' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.bg-layer-2{
+background:radial-gradient(ellipse at 20% 20%,rgba(106,90,205,0.15) 0%,transparent 50%),
+radial-gradient(ellipse at 80% 70%,rgba(132,109,255,0.1) 0%,transparent 55%);
+animation:bgLightMove 25s ease-in-out infinite alternate;
+}
+.bg-layer-3{
+background:rgba(0,0,0,0.25);
+backdrop-filter:blur(2px);
+}
+.star-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+@keyframes fadeIn{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+@keyframes breathLight{0%,100%{box-shadow:0 0 25px #6a5acd55}50%{box-shadow:0 0 50px #6a5acd,0 0 80px #846dff33}}
+@keyframes streamBorder{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glowPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 5px #6a5acd)}50%{filter:brightness(1.2) drop-shadow(0 0 15px #846dff)}}
+@keyframes bgLightMove{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.08) translate(15px,10px)}}
+.animate{animation:fadeIn 1s ease forwards}
+.breath-glow{animation:breathLight 4s ease-in-out infinite}
+.float-animate{animation:floatUp 3.5s ease-in-out infinite}
+.glow-animate{animation:glowPulse 2s ease-in-out infinite}
+.stream-card{background:rgba(25,25,55,0.55) padding-box;border:1px solid transparent;border-radius:14px;background-image:linear-gradient(rgba(25,25,55,0.55),rgba(25,25,55,0.55)),linear-gradient(90deg,#6a5acd,#c3b1ff,#6a5acd);background-size:100% 100%,200% 200%;background-origin:padding-box,border-box;background-clip:padding-box,border-box;animation:streamBorder 5s linear infinite}
+.glass{backdrop-filter:blur(14px);padding:2rem;margin:1rem;transition:all 0.4s ease}
+.glass:hover{transform:translateY(-5px);box-shadow:0 10px 45px rgba(106,90,205,0.35)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem}
+.hero h1{font-size:clamp(1.8rem,5vw,3.4rem);color:#d2c8ff;margin-bottom:0.6rem;text-shadow:0 0 30px #7b68ee,0 0 60px #6a5acd44}
+.hero p{font-size:clamp(1rem,3vw,1.35rem);color:#b4b4e0;margin-bottom:3rem;letter-spacing:2px}
+.ip-box{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);padding:1rem 1.5rem;border-radius:14px;margin-bottom:2rem}
+.ip-text{font-size:clamp(1rem,3vw,1.4rem);color:#e8e8ff;font-weight:bold}
+.copy-btn,.copy-qq,.modal-close{background:linear-gradient(135deg,#483d8b,#7b68ee);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all 0.3s ease}
+.copy-btn{padding:0.8rem 1.5rem;font-size:1rem}
+.copy-btn:hover{transform:scale(1.08);box-shadow:0 0 25px #7b68ee88}
+.download-btn{background:linear-gradient(135deg,#233554,#4078c0);color:#fff;padding:1rem 2rem;border-radius:12px;text-decoration:none;font-size:1.1rem;transition:0.35s;margin-top:1rem}
+section{max-width:1250px;margin:0 auto;padding:3rem 1rem}
+section h2{text-align:center;font-size:clamp(1.5rem,4vw,2.3rem);color:#d2c8ff;margin-bottom:2rem;text-shadow:0 0 20px #6a5acd66}
+.grid-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.card-item{padding:1.5rem;border-radius:14px;transition:all 0.4s ease;cursor:pointer;text-align:center}
+.card-item:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 15px 40px rgba(106,90,205,0.3)}
+.card-item h3{color:#c3b1ff;margin-bottom:1rem;font-size:1.3rem}
+.card-item p{color:#ccc;line-height:1.7}
+.copy-qq{padding:0.5rem 1.2rem;margin-top:1rem}
+footer{text-align:center;padding:2.5rem 1rem;background:rgba(0,0,0,0.4);margin-top:3rem;color:#9999bb}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:999}
+.modal-box{width:92%;max-width:520px;padding:2rem;border-radius:20px;animation:popIn 0.4s ease}
+.modal-title{font-size:1.6rem;background:linear-gradient(90deg,#c3b1ff,#6a5acd);-webkit-background-clip:text;color:transparent;margin-bottom:1rem}
+.modal-desc{color:#d0d0f0;line-height:1.8;font-size:1rem;margin-bottom:1.5rem}
+.modal-close{width:100%;padding:0.8rem;font-size:1rem}
+
+/* 右侧悬浮窗 */
+.float-box{
+position:fixed;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+z-index:998;
+width:140px;
+background:linear-gradient(145deg,rgba(70,60,150,0.85),rgba(30,25,80,0.9));
+border:1px solid rgba(150,130,255,0.25);
+border-radius:16px;
+padding:20px 15px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 30px rgba(106,90,205,0.35);
+animation:floatUp 4s ease-in-out infinite;
+transition:all 0.3s;
+}
+.float-close{
+position:absolute;
+top:8px;
+right:10px;
+color:#ccc;
+cursor:pointer;
+font-size:18px;
+}
+.float-box h4{
+color:#d2c8ff;
+text-align:center;
+margin-bottom:15px;
+font-size:16px;
+}
+.float-item{
+display:block;
+width:100%;
+text-align:center;
+padding:8px 0;
+margin:6px 0;
+background:rgba(255,255,255,0.08);
+border-radius:8px;
+color:#e0e0ff;
+text-decoration:none;
+font-size:14px;
+transition:0.3s;
+}
+.float-item:hover{
+background:rgba(106,90,205,0.3);
+}
+@media (max-width:768px){
+.float-box{width:110px;right:8px;padding:15px 10px;}
+.float-item{font-size:12px;padding:6px 0;}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer-1"></div>
+<div class="bg-layer-2"></div>
+<div class="bg-layer-3"></div>
+<canvas class="star-bg"></canvas>
+
+<!-- 右侧悬浮导航 -->
+<div class="float-box" id="floatBox">
+<span class="float-close" onclick="closeFloat()">×</span>
+<h4>快速导航</h4>
+<a href="#home" class="float-item">首页</a>
+<a href="#intro" class="float-item">服务器介绍</a>
+<a href="#rule" class="float-item">服务器规则</a>
+<a href="#team" class="float-item">管理团队</a>
+<a href="#nation" class="float-item">各大阵营</a>
+<a href="#feature" class="float-item">玩法特色</a>
+<a href="#newbie" class="float-item">新人指南</a>
+<a href="#footer" class="float-item">底部信息</a>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal-overlay" id="modal">
+<div class="modal-box stream-card">
+<h3 class="modal-title" id="modalTitle"></h3>
+<p class="modal-desc" id="modalDesc"></p>
+<button class="modal-close" onclick="closeModal()">关闭</button>
+</div>
+</div>
+
+<!-- 首页 -->
+<div class="hero animate" id="home">
+<h1 class="float-animate">KRT系列一服-中世纪国战</h1>
+<p>史诗国战 | 阵营争霸 | 帝国崛起 | 多人联机</p>
+<div class="ip-box stream-card breath-glow">
+<span class="ip-text">服务器IP：23987895</span>
+<button class="copy-btn" onclick="copyIP()">一键复制IP</button>
+</div>
+<a href="https://mc.163.com" target="_blank" class="download-btn">📥 我的世界官方客户端下载</a>
+</div>
+
+<!-- 服务器介绍 -->
+<section class="glass stream-card animate" id="intro">
+<h2>📜 服务器介绍</h2>
+<div style="text-align:center;color:#ccc;line-height:2;font-size:1.05rem">
+KRT中世纪国战服务器，主打真实中世纪战争玩法。<br>
+多国阵营对立、领土争夺、城邦建造、军事发展、外交博弈。<br>
+长期稳定开放，拒绝乱改规则、拒绝特权偏袒，打造公平好玩的国战生存服。<br>
+适合喜欢战争、建造、策略、多人社交的玩家长期游玩。
+</div>
+</section>
+
+<!-- 服务器规则 -->
+<section id="rule">
+<h2>📋 服务器规则</h2>
+<div class="grid-box">
+<div class="card-item stream-card"><h3>禁止违规破坏</h3><p>禁止恶意毁图、轰炸他人建筑、偷取物品、恶意骚扰玩家</p></div>
+<div class="card-item stream-card"><h3>禁止外挂作弊</h3><p>一切作弊、模组外挂、刷物品、飞行加速全部严惩</p></div>
+<div class="card-item stream-card"><h3>文明交流互动</h3><p>禁止骂人、引战、辱骂管理、传播不良内容，和谐游玩</p></div>
+<div class="card-item stream-card"><h3>阵营公平对战</h3><p>禁止跨阵营开挂帮打、恶意卡bug破坏对战平衡</p></div>
+</div>
+</section>
+
+<!-- 管理团队 -->
+<section id="team">
+<h2>👔 管理人员团队</h2>
+<div class="grid-box">
+<div class="card-item stream-card breath-glow">
+<h3>1. 科尔特</h3>
+<p>服主 / 总管理<br>服务器统筹、规则制定、全局管理</p>
+</div>
+<div class="card-item stream-card breath-glow">
+<h3>2. 黄慧欣</h3>
+<p>运营管理<br>群内维护、玩家沟通、活动策划</p>
+</div>
+<div class="card-item stream-card breath-glow">
+<h3>3. 骇客</h3>
+<p>技术管理<br>服务器维护、bug修复、功能配置</p>
+</div>
+<div class="card-item stream-card breath-glow">
+<h3>4. 挖出</h3>
+<p>秩序管理<br>在线巡查、违规处理、维持服务器秩序</p>
+</div>
+</div>
+</section>
+
+<!-- 各大阵营 -->
+<section id="nation">
+<h2>⚔️ 各国阵营 QQ 群</h2>
+<div class="grid-box">
+<div class="card-item stream-card"><h3>德国 🇩🇪</h3><p>1080401345</p><button class="copy-qq" onclick="copyText('1080401345')">复制群号</button></div>
+<div class="card-item stream-card"><h3>俄罗斯 🇷🇺</h3><p>716541842</p><button class="copy-qq" onclick="copyText('716541842')">复制群号</button></div>
+<div class="card-item stream-card"><h3>英国 🇬🇧</h3><p>979706609</p><button class="copy-qq" onclick="copyText('979706609')">复制群号</button></div>
+<div class="card-item stream-card"><h3>挪威 🇳🇴</h3><p>1034083619</p><button class="copy-qq" onclick="copyText('1034083619')">复制群号</button></div>
+<div class="card-item stream-card"><h3>法国 🇫🇷</h3><p>1084765137</p><button class="copy-qq" onclick="copyText('1084765137')">复制群号</button></div>
+<div class="card-item stream-card"><h3>意大利 🇮🇹</h3><p>1084612146</p><button class="copy-qq" onclick="copyText('1084612146')">复制群号</button></div>
+<div class="card-item stream-card"><h3>芬兰 🇫🇮</h3><p>793549824</p><button class="copy-qq" onclick="copyText('793549824')">复制群号</button></div>
+<div class="card-item stream-card"><h3>奥斯曼 🇹🇷</h3><p>735911281</p><button class="copy-qq" onclick="copyText('735911281')">复制群号</button></div>
+<div class="card-item stream-card"><h3>美国 🇺🇸</h3><p>688768472</p><button class="copy-qq" onclick="copyText('688768472')">复制群号</button></div>
+<div class="card-item stream-card"><h3>联合国 🇺🇳</h3><p>1083227197</p><button class="copy-qq" onclick="copyText('1083227197')">复制群号</button></div>
+</div>
+</section>
+
+<!-- 服务器特色 -->
+<section id="feature">
+<h2>🏰 服务器特色玩法</h2>
+<div class="grid-box">
+<div class="card-item stream-card" onclick="openModal('国家战争','跨阵营攻城、领土争夺、大国博弈，还原真实中世纪战争，万人博弈，热血国战！')">
+<h3>⚔️ 国家战争</h3><p>真实阵营对抗，攻城略地，建立庞大帝国</p>
+</div>
+<div class="card-item stream-card" onclick="openModal('外交系统','自由结盟、宣战停战、势力贸易、多方制衡，玩转权谋外交')">
+<h3>🏛️ 外交系统</h3><p>联盟宣战、议和贸易，靠谋略掌控大陆</p>
+</div>
+<div class="card-item stream-card" onclick="openModal('领地保护','专属领地锁、防破坏机制、区域权限，杜绝恶意毁图')">
+<h3>🏠 领地保护</h3><p>安全领地机制，安心建造城邦家园</p>
+</div>
+<div class="card-item stream-card" onclick="openModal('长期稳定','长期运维、规则透明、公平公正、无特权乱权')">
+<h3>⚙️ 稳定长久</h3><p>长期开放不跑路，公平纯净国战环境</p>
+</div>
+</div>
+</section>
+
+<!-- 新人指南 -->
+<section class="glass stream-card animate" id="newbie">
+<h2>📖 新人入坑指南</h2>
+<div style="color:#ccc;line-height:2;font-size:1.05rem;text-align:center">
+1. 复制服务器IP，打开我的世界进入服务器<br>
+2. 选择喜欢的国家阵营，加入对应QQ群<br>
+3. 熟悉服务器规则，遵守管理安排<br>
+4. 收集资源、建造基地、发展军事力量<br>
+5. 参与国战、外交互动，体验完整中世纪玩法
+</div>
+</section>
+
+<!-- 官方总群 -->
+<section class="glass stream-card animate">
+<h2>📢 官方总群</h2>
+<div style="text-align:center;font-size:1.2rem;color:#e0e0ff">
+总QQ群：<strong>1001845797</strong><br><br>
+<button class="copy-qq" onclick="copyText('1001845797')">复制总群号</button>
+</div>
+</section>
+
+<!-- 底部 -->
+<footer class="stream-card" id="footer">
+<h2>KRT系列一服-中世纪国战</h2>
+<p>© 2026 版权所有 | 非盈利我的世界中世纪国战服务器</p>
+</footer>
+
+<script>
+function copyIP(){navigator.clipboard.writeText("23987895");openModal('复制成功','服务器IP【23987895】已复制，打开我的世界即可连接游玩！')}
+function copyText(t){navigator.clipboard.writeText(t);openModal('群号复制成功','QQ群号已复制，前往QQ搜索加入对应阵营！')}
+function openModal(title,desc){document.getElementById("modalTitle").innerText=title;document.getElementById("modalDesc").innerText=desc;document.getElementById("modal").style.display="flex"}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function closeFloat(){document.getElementById("floatBox").style.display="none"}
+
+// 星空特效
+const canvas=document.querySelector(".star-bg");
+const ctx=canvas.getContext("2d");
+let w,h,stars=[];
+function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+resize();window.onresize=resize;
+for(let i=0;i<300;i++){
+stars.push({
+x:Math.random()*w,
+y:Math.random()*h,
+r:Math.random()*1.2+0.2,
+s:Math.random()*0.4+0.15,
+a:Math.random()*0.6+0.2
+})
+}
+function drawStar(){
+ctx.clearRect(0,0,w,h);
+stars.forEach(s=>{
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fillStyle=`rgba(220,210,255,${s.a})`;
+ctx.fill();
+s.y+=s.s;
+if(s.y>h){s.y=0;s.x=Math.random()*w}
+});
+requestAnimationFrame(drawStar)
+}
+drawStar();
+
+// 滚动齿轮音效 极简加入
+let gearAudio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-gear-wheel-click-1366.mp3");
+gearAudio.volume = 0.15;
+let canPlay = true;
+window.addEventListener('scroll', () => {
+  if(!canPlay) return;
+  canPlay = false;
+  gearAudio.currentTime = 0;
+  gearAudio.play();
+  setTimeout(() => canPlay = true, 120);
+});
+</script>
+</body>
+</html>
