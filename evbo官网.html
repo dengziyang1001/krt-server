@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=.8,maximum-scale=1.0">
+<title>跑酷文明 & PVP文明</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Microsoft YaHei,sans-serif;}
+:root{
+    --main-color:#7dd3fc;
+    --bg1:#0d1137;
+    --bg2:#1a1a4b;
+    --bg3:#2e1a7e;
+}
+body{min-height:100vh;background:linear-gradient(-45deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));background-size:400% 400%;animation:bgFlow 15s ease infinite;color:#fff;overflow-x:hidden;user-select:none;}
+@keyframes bgFlow{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.star{position:fixed;width:2px;height:2px;background:#fff;border-radius:50%;animation:starTwinkle 3s infinite linear;z-index:0;}
+@keyframes starTwinkle{0%,100%{opacity:.2;}50%{opacity:1;}}
+.snow{position:fixed;width:4px;height:4px;background:#fff;border-radius:50%;animation:snowFall 8s infinite linear;z-index:0;opacity:.6;}
+@keyframes snowFall{0%{transform:translateY(-10vh) rotate(0deg);opacity:0;}10%{opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+.container{position:relative;z-index:10;max-width:1300px;margin:0 auto;padding:50px 20px;}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:22px 35px;background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border-radius:25px;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(31,38,135,.3);margin-bottom:60px;transition:all .4s ease;}
+.navbar:hover{border-color:var(--main-color);box-shadow:0 0 40px rgba(125,211,252,.3);}
+.logo{font-size:28px;color:var(--main-color);font-weight:700;text-shadow:0 0 15px var(--main-color);transition:all 0.3s;}
+.logo:hover{letter-spacing:3px;transform:scale(1.05);}
+.header{text-align:center;margin:70px 0;animation:fadeIn 1.2s ease-out;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-50px);}to{opacity:1;transform:translateY(0);}}
+.header h1{font-size:56px;background:linear-gradient(90deg,var(--main-color),#a78bfa,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(125,211,252,.4);margin-bottom:20px;letter-spacing:2px;transition:all 0.4s;cursor:default;}
+.header h1:hover{filter:brightness(1.2);transform:scale(1.02);}
+.header p{font-size:22px;color:#e0f2fe;text-shadow:0 0 10px rgba(255,255,255,.2);margin-bottom:30px;transition:0.3s;}
+.header p:hover{text-shadow:0 0 20px var(--main-color);}
+.download-btn{display:inline-block;padding:18px 45px;background:linear-gradient(90deg,var(--main-color),#2563eb);border-radius:50px;color:#fff;font-size:20px;font-weight:700;text-decoration:none;text-shadow:0 0 10px rgba(125,211,252,.5);box-shadow:0 10px 30px rgba(37,99,235,.4);transition:all .4s ease;position:relative;overflow:hidden;}
+.download-btn::after{content:'';position:absolute;width:100%;height:100%;left:-100%;top:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left 0.6s;}
+.download-btn:hover::after{left:100%;}
+.download-btn:hover{transform:scale(1.08) translateY(-5px);box-shadow:0 15px 40px rgba(125,211,252,.6);background:linear-gradient(90deg,#2563eb,var(--main-color));}
+.download-btn:active{transform:scale(0.95);}
+.notice{background:rgba(125,211,252,.08);border-left:6px solid var(--main-color);padding:25px 30px;border-radius:16px;margin-bottom:50px;animation:leftSlide 1s ease;cursor:pointer;transition:all .3s ease;}
+.notice:hover{background:rgba(125,211,252,.15);transform:translateX(5px) scale(1.02);}
+.notice:active{scale:0.98;}
+@keyframes leftSlide{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
+.notice h3{color:var(--main-color);font-size:22px;margin-bottom:10px;transition:0.3s;}
+.notice h3:hover{padding-left:10px;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:35px;}
+.card{background:rgba(255,255,255,.04);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:40px;transition:all .5s ease;animation:cardUp 1.2s ease forwards;opacity:0;box-shadow:0 10px 40px rgba(0,0,0,.3);cursor:pointer;position:relative;}
+.card:nth-child(1){animation-delay:.1s;}
+.card:nth-child(2){animation-delay:.2s;}
+.card:nth-child(3){animation-delay:.3s;}
+.card:nth-child(4){animation-delay:.4s;}
+.card:nth-child(5){animation-delay:.5s;}
+.card:nth-child(6){animation-delay:.6s;}
+@keyframes cardUp{from{opacity:0;transform:translateY(60px);}to{opacity:1;transform:translateY(0);}}
+.card:hover{transform:translateY(-16px) scale(1.04);box-shadow:0 20px 50px rgba(125,211,252,.35);border-color:var(--main-color);background:rgba(125,211,252,.08);}
+.card:active{transform:translateY(-5px) scale(0.98);}
+.card h2{font-size:30px;background:linear-gradient(90deg,var(--main-color),#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid rgba(125,211,252,.3);transition:0.3s;}
+.card h2:hover{background-position:200% 0;}
+.info{font-size:19px;line-height:2.5;margin:8px 0;transition:0.3s;padding:4px 6px;border-radius:6px;}
+.info:hover{background:rgba(125,211,252,0.1);padding-left:10px;}
+.info span{color:var(--main-color);font-weight:700;text-shadow:0 0 6px var(--main-color);transition:0.3s;}
+.info span:hover{text-shadow:0 0 12px var(--main-color);}
+.copy-btn{color:var(--main-color);cursor:pointer;margin-left:5px;transition:all .2s ease;padding:2px 8px;border-radius:4px;}
+.copy-btn:hover{text-decoration:underline;background:rgba(125,211,252,0.15);}
+.copy-btn:active{scale:0.9;}
+.footer{text-align:center;margin-top:100px;padding-top:40px;border-top:1px solid rgba(255,255,255,.1);color:#cbd5e1;font-size:16px;animation:fadeIn 2s ease;transition:0.3s;}
+.footer:hover{color:#e0f2fe;}
+.mouse-light{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(rgba(125,211,252,0.15),transparent);pointer-events:none;z-index:1;transform: translate(-50%,-50%);transition:0.1s ease;}
+.tips-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);padding:12px 30px;background:rgba(125,211,252,0.25);backdrop-filter:blur(10px);border-radius:50px;border:1px solid var(--main-color);color:#fff;font-size:16px;opacity:0;transition:all 0.4s;z-index:999;}
+.tips-toast.show{opacity:1;bottom:60px;}
+.scroll-top{position:fixed;right:30px;bottom:30px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--main-color),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;cursor:pointer;opacity:0;visibility:hidden;transition:0.4s;z-index:99;box-shadow:0 0 20px var(--main-color);}
+.scroll-top.show{opacity:1;visibility:visible;}
+.scroll-top:hover{transform:scale(1.1) rotate(360deg);}
+@media(max-width:768px){.grid{grid-template-columns:1fr;}.header h1{font-size:36px;}.navbar{flex-direction:column;gap:20px;text-align:center;}.card{padding:30px 25px;}.download-btn{padding:15px 35px;font-size:18px;}}
+</style>
+</head>
+<body>
+<div class="mouse-light"></div>
+<div id="stars"></div>
+<div id="snows"></div>
+<div class="tips-toast" id="toast"></div>
+<div class="scroll-top" id="goTop">↑</div>
+<div class="container">
+<div class="navbar">
+<div class="logo">Evbo 文明官方服务器</div>
+<div style="font-size:17px;">网易我的世界 | 专业团队运营</div>
+</div>
+<div class="header">
+<h1>跑酷文明 & PVP文明 双服官网</h1>
+<p>YouTube Evbo 原版完美还原 | 顶级品质 · 公平竞技</p>
+<a href="https://mc.163.com/" target="_blank" class="download-btn">📥 下载网易我的世界</a>
+</div>
+<div class="notice">
+<h3>📢 服务器公告</h3>
+<p id="siteNotice">双服 24 小时开放 | 公平公正 | 无外挂 | 无特权 | 节假日活动 | 福利丰厚</p>
+</div>
+<div class="grid">
+<div class="card">
+<h2>🏃 跑酷文明</h2>
+<div class="info">服务器号：<span class="copy-text">60691986</span> <span class="copy-btn" onclick="copyText(this)">复制</span></div>
+<div class="info">QQ交流群：<span class="copy-text">1075847132</span> <span class="copy-btn" onclick="copyText(this)">复制</span></div>
+<div class="info">状态：<span style="color:#22c55e;">🔥 正常开放</span></div>
+<div class="info">版本：<span>网易我的世界中国版</span></div>
+</div>
+<div class="card">
+<h2>⚔️ PVP文明</h2>
+<div class="info">服务器号：<span class="copy-text">22782751</span> <span class="copy-btn" onclick="copyText(this)">复制</span></div>
+<div class="info">QQ交流群：<span class="copy-text">1082670264</span> <span class="copy-btn" onclick="copyText(this)">复制</span></div>
+<div class="info">状态：<span style="color:#22c55e;">🔥 正常开放</span></div>
+<div class="info">版本：<span>网易我的世界中国版</span></div>
+</div>
+<div class="card">
+<h2>🛡️ 管理团队</h2>
+<div class="info">服主：<span>乞巧</span></div>
+<div class="info">总管理：<span>咚咚</span></div>
+<div class="info">指令管理：<span>2号</span></div>
+<div class="info">建筑大师：<span>回路</span></div>
+<div class="info">管理：<span>XxXnulkXxX</span></div>
+</div>
+<div class="card">
+<h2>👮 在线管理</h2>
+<div class="info" style="line-height:2;">管理：<span>轩轩、小可、無仁、法师</span></div>
+<div class="info">服务：<span>2~3小时在线处理问题</span></div>
+<div class="info">纪律：<span>严格公正 · 绝不偏袒</span></div>
+</div>
+<div class="card">
+<h2>📘 跑酷文明玩法</h2>
+<div class="info">阶级系统：<span>菜鸟→专家→大师(锁链)→冠军→神</span></div>
+<div class="info">核心：<span>跑酷决斗、跑酷晋升、个性化玩法</span></div>
+<div class="info">特色：<span>等级权限、跑酷药水、剧情副本</span></div>
+</div>
+<div class="card">
+<h2>⚔️ PVP文明玩法</h2>
+<div class="info">战力系统：<span>段位升级、战力评分</span></div>
+<div class="info">核心：<span>擂台对战、势力争夺、公平PVP</span></div>
+<div class="info">特色：<span>专属装备、荣誉称号、每日竞技</span></div>
+</div>
+</div>
+<div class="footer">
+© 2026 | XxXnulkXxX All Rights Reserved | 𝓘𝓷𝓿𝓲𝓼𝓲𝓫𝓵𝓮<br>
+Evbo 跑酷文明 & PVP文明 服务器 官方网站
+</div>
+</div>
+<script>
+// 云端全局数据存储
+const DB_NAME = "ServerWebData";
+function getGlobalData(key,def){
+    let data = JSON.parse(localStorage.getItem(DB_NAME)||"{}");
+    return data[key]??def;
+}
+function setGlobalData(key,val){
+    let data = JSON.parse(localStorage.getItem(DB_NAME)||"{}");
+    data[key]=val;
+    localStorage.setItem(DB_NAME,JSON.stringify(data));
+}
+
+function loadAdminConfig(){
+    let nt = getGlobalData("notice","双服 24 小时开放 | 公平公正 | 无外挂 | 无特权 | 节假日活动 | 福利丰厚");
+    document.getElementById("siteNotice").innerText = nt;
+    let eff = getGlobalData("effect","snow");
+    changeSiteEffect(eff);
+    let thm = getGlobalData("theme","default");
+    changeSiteTheme(thm);
+}
+
+function changeSiteEffect(type){
+    let starBox = document.getElementById("stars");
+    let snowBox = document.getElementById("snows");
+    starBox.innerHTML = "";
+    snowBox.innerHTML = "";
+    if(type=="star"){
+        for(let i=0;i<150;i++){
+            const star=document.createElement("div");
+            star.className="star";
+            star.style.left=Math.random()*100+"%";
+            star.style.top=Math.random()*100+"%";
+            star.style.animationDelay=Math.random()*3+"s";
+            starBox.appendChild(star);
+        }
+    }else if(type=="snow"){
+        for(let i=0;i<60;i++){
+            const snow=document.createElement("div");
+            snow.className="snow";
+            snow.style.left=Math.random()*100+"%";
+            snow.style.animationDuration=Math.random()*4+6+"s";
+            snow.style.animationDelay=Math.random()*8+"s";
+            snowBox.appendChild(snow);
+        }
+    }
+}
+
+function changeSiteTheme(color){
+    let root = document.documentElement.style;
+    switch(color){
+        case "blue":root.setProperty("--main-color","#7dd3fc");root.setProperty("--bg1","#0d1137");root.setProperty("--bg2","#1a1a4b");root.setProperty("--bg3","#2e1a7e");break;
+        case "purple":root.setProperty("--main-color","#a78bfa");root.setProperty("--bg1","#1b0f36");root.setProperty("--bg2","#2c1b54");root.setProperty("--bg3","#402880");break;
+        case "pink":root.setProperty("--main-color","#f472b6");root.setProperty("--bg1","#370d28");root.setProperty("--bg2","#4b1a38");root.setProperty("--bg3","#7e2e5a");break;
+        case "green":root.setProperty("--main-color","#34d399");root.setProperty("--bg1","#0d3723");root.setProperty("--bg2","#1a4b30");root.setProperty("--bg3","#1a7e46");break;
+        case "red":root.setProperty("--main-color","#f87171");root.setProperty("--bg1","#370d0d");root.setProperty("--bg2","#4b1a1a");root.setProperty("--bg3","#7e2e2e");break;
+        case "orange":root.setProperty("--main-color","#fb923c");root.setProperty("--bg1","#37200d");root.setProperty("--bg2","#4b2e1a");root.setProperty("--bg3","#7e472e");break;
+        case "cyan":root.setProperty("--main-color","#22d3ee");root.setProperty("--bg1","#0d2d37");root.setProperty("--bg2","#1a404b");root.setProperty("--bg3","#2e607e");break;
+        case "dark":root.setProperty("--main-color","#94a3b8");root.setProperty("--bg1","#050505");root.setProperty("--bg2","#111111");root.setProperty("--bg3","#1f1f1f");break;
+        case "light":root.setProperty("--main-color","#ffffff");root.setProperty("--bg1","#222831");root.setProperty("--bg2","#393e46");root.setProperty("--bg3","#455261");break;
+        default:root.setProperty("--main-color","#7dd3fc");root.setProperty("--bg1","#0d1137");root.setProperty("--bg2","#1a1a4b");root.setProperty("--bg3","#2e1a7e");
+    }
+}
+
+function copyText(btn){
+const text=btn.previousElementSibling.textContent;
+navigator.clipboard.writeText(text).then(()=>{
+const originalText=btn.textContent;
+btn.textContent="已复制";
+showToast("内容复制成功！");
+setTimeout(()=>{
+btn.textContent=originalText;
+},1500);
+});
+}
+const mouseLight=document.querySelector('.mouse-light');
+document.addEventListener('mousemove',e=>{
+mouseLight.style.left=e.clientX+'px';
+mouseLight.style.top=e.clientY+'px';
+});
+const toast=document.getElementById('toast');
+function showToast(text){
+toast.innerText=text;
+toast.classList.add('show');
+setTimeout(()=>toast.classList.remove("show"),2000);
+}
+const goTop=document.getElementById('goTop');
+window.addEventListener('scroll',()=>{
+if(window.scrollY>300){
+goTop.classList.add('show');
+}else{
+goTop.classList.remove('show');
+}
+});
+goTop.addEventListener('click',()=>{
+window.scrollTo({top:0,behavior:'smooth'});
+showToast("已回到顶部");
+});
+document.querySelector('.logo').addEventListener('click',()=>showToast("欢迎来到Evbo文明服务器官网"));
+document.querySelector('.notice').addEventListener('click',()=>showToast("服务器稳定运行，放心游玩"));
+document.querySelectorAll('.card').forEach(item=>{
+item.addEventListener('mouseenter',()=>showToast("查看服务器详情"));
+});
+document.body.addEventListener('contextmenu',e=>e.preventDefault());
+document.querySelectorAll('.info').forEach(el=>{
+el.addEventListener('mouseenter',()=>el.style.paddingLeft='15px');
+el.addEventListener('mouseleave',()=>el.style.paddingLeft='6px');
+});
+window.addEventListener('load',()=>{
+loadAdminConfig();
+setTimeout(()=>showToast("页面加载完成，欢迎来访"),1000);
+});
+</script>
+</body>
+</html>

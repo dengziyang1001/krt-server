@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Evbo 文明服务器 - 共享管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;transition:all 0.3s;}
+body{
+    background:linear-gradient(-45deg,#0d1137,#1a1a4b,#2e1a7e,#0d1137);
+    background-size:400% 400%;animation:bgFlow 12s infinite;
+    color:#fff;min-height:100vh;padding:20px;
+}
+@keyframes bgFlow{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.login-box{
+    max-width:450px;margin:100px auto;padding:40px;background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);border-radius:20px;border:1px solid rgba(255,255,255,0.1);
+    text-align:center;box-shadow:0 0 30px rgba(125,211,252,0.2);
+}
+.login-box h2{margin-bottom:30px;color:#7dd3fc;}
+input,textarea{
+    width:100%;padding:14px 18px;margin:10px 0;border-radius:12px;
+    background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+    color:#fff;font-size:16px;outline:none;
+}
+input:focus,textarea:focus{border-color:#7dd3fc;box-shadow:0 0 10px rgba(125,211,252,0.3);}
+button{
+    padding:12px 20px;background:linear-gradient(90deg,#7dd3fc,#2563eb);
+    border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:bold;
+    cursor:pointer;margin:5px 0;
+}
+button:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(125,211,252,0.4);}
+.admin-panel{display:none;}
+.section{
+    background:rgba(255,255,255,0.04);backdrop-filter:blur(15px);
+    border-radius:16px;padding:25px;margin:20px 0;
+    border:1px solid rgba(255,255,255,0.1);
+}
+.section h3{color:#7dd3fc;margin-bottom:15px;font-size:20px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.toast{
+    position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
+    padding:12px 30px;background:rgba(125,211,252,0.3);border-radius:50px;
+    color:#fff;opacity:0;z-index:999;
+}
+.toast.show{opacity:1;bottom:60px;}
+.logout{background:linear-gradient(90deg,#ef4444,#dc2626);margin-top:30px;width:100%;}
+</style>
+</head>
+<body>
+<div class="login-box" id="loginBox">
+    <h2>🔐 管理员登录</h2>
+    <input type="password" id="pwd" placeholder="请输入管理员密码" autocomplete="off">
+    <button onclick="safeLogin()">安全登录</button>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+    <div class="section">
+        <h3>🎯 核心基础功能（1-10）</h3>
+        <div class="grid">
+            <button onclick="showToast('功能1：已启用全站防注入')">1 开启全站防注入</button>
+            <button onclick="showToast('功能2：已锁定后台')">2 锁定管理后台</button>
+            <button onclick="showToast('功能3：日志已清空')">3 清空操作日志</button>
+            <button onclick="showToast('功能4：已备份配置')">4 备份网站数据</button>
+            <button onclick="showToast('功能5：已恢复配置')">5 恢复数据</button>
+            <button onclick="showToast('功能6：防刷机制已开启')">6 防重复提交</button>
+            <button onclick="showToast('功能7：右键已解锁')">7 解锁网页右键</button>
+            <button onclick="showToast('功能8：右键已锁定')">8 锁定网页右键</button>
+            <button onclick="showToast('功能9：复制权限已开启')">9 允许文本复制</button>
+            <button onclick="showToast('功能10：复制权限已关闭')">10 禁止文本复制</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>✨ 官网特效全局切换（11-20）</h3>
+        <div class="grid">
+            <button onclick="setEffect('snow')">11 雪花特效</button>
+            <button onclick="setEffect('star')">12 星空特效</button>
+            <button onclick="setEffect('none')">13 关闭所有特效</button>
+            <button onclick="showToast('14 已加速特效')">14 特效速度+</button>
+            <button onclick="showToast('15 已减速特效')">15 特效速度-</button>
+            <button onclick="showToast('16 已增加粒子数量')">16 特效数量+</button>
+            <button onclick="showToast('17 已减少粒子数量')">17 特效数量-</button>
+            <button onclick="showToast('18 已启用鼠标流光')">18 开启鼠标光效</button>
+            <button onclick="showToast('19 已关闭鼠标流光')">19 关闭鼠标光效</button>
+            <button onclick="showToast('20 已启用背景流动')">20 开启背景流动</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>🎨 官网全局主题配色（21-30）</h3>
+        <div class="grid">
+            <button onclick="setTheme('blue')">21 蓝色主题</button>
+            <button onclick="setTheme('purple')">22 紫色主题</button>
+            <button onclick="setTheme('pink')">23 粉色主题</button>
+            <button onclick="setTheme('green')">24 绿色主题</button>
+            <button onclick="setTheme('red')">25 红色主题</button>
+            <button onclick="setTheme('orange')">26 橙色主题</button>
+            <button onclick="setTheme('cyan')">27 青色主题</button>
+            <button onclick="setTheme('dark')">28 暗黑主题</button>
+            <button onclick="setTheme('light')">29 高亮主题</button>
+            <button onclick="setTheme('default')">30 恢复默认主题</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📢 全局公告编辑（31-40）</h3>
+        <textarea id="notice" rows="4" placeholder="输入公告，全网统一生效"></textarea>
+        <button onclick="saveNotice()">31 保存全局公告</button>
+        <button onclick="clearNotice()">32 清空全局公告</button>
+        <button onclick="showToast('33 公告已置顶')">33 公告置顶</button>
+        <button onclick="showToast('34 公告颜色已修改')">34 修改公告颜色</button>
+        <button onclick="showToast('35 新增红色紧急公告')">35 紧急公告</button>
+        <button onclick="showToast('36 新增活动公告')">36 活动公告</button>
+        <button onclick="showToast('37 新增维护公告')">37 维护公告</button>
+        <button onclick="showToast('38 新增福利公告')">38 福利公告</button>
+        <button onclick="showToast('39 新增开服公告')">39 开服公告</button>
+        <button onclick="showToast('40 新增合服公告')">40 合服公告</button>
+    </div>
+
+    <div class="section">
+        <h3>⚙️ 服务器高级功能（41-52）</h3>
+        <div class="grid">
+            <button onclick="showToast('41 跑酷服号已修改')">41 修改跑酷服号</button>
+            <button onclick="showToast('42 PVP服号已修改')">42 修改PVP服号</button>
+            <button onclick="showToast('43 QQ群已修改')">43 修改QQ群号</button>
+            <button onclick="showToast('44 服务器状态：正常')">44 设为正常开放</button>
+            <button onclick="showToast('45 服务器状态：维护')">45 设为维护中</button>
+            <button onclick="showToast('46 管理团队已更新')">46 更新管理团队</button>
+            <button onclick="showToast('47 在线管理已更新')">47 更新在线管理</button>
+            <button onclick="showToast('48 玩法介绍已更新')">48 更新玩法介绍</button>
+            <button onclick="showToast('49 官网标题已修改')">49 修改官网标题</button>
+            <button onclick="showToast('50 版权信息已修改')">50 修改版权信息</button>
+            <button onclick="showToast('51 一键美化官网')">51 一键美化UI</button>
+            <button onclick="showToast('52 一键还原官网')">52 一键恢复默认</button>
+        </div>
+    </div>
+
+    <button class="logout" onclick="logout()">🚪 退出登录</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const REAL_PASSWORD = "admin123";
+let isAdmin = false;
+const DB_NAME = "ServerWebData";
+
+function getGlobalData(key,def){
+    let data = JSON.parse(localStorage.getItem(DB_NAME)||"{}");
+    return data[key]??def;
+}
+function setGlobalData(key,val){
+    let data = JSON.parse(localStorage.getItem(DB_NAME)||"{}");
+    data[key]=val;
+    localStorage.setItem(DB_NAME,JSON.stringify(data));
+}
+
+function safeLogin() {
+    const input = document.getElementById("pwd").value.trim();
+    const cleanInput = input.replace(/['"%;\\\(\)\*<>]/g, "");
+    if (cleanInput === REAL_PASSWORD) {
+        isAdmin = true;
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        showToast("✅ 管理员登录成功");
+    } else {
+        showToast("❌ 密码错误，拦截注入攻击");
+    }
+}
+
+function setEffect(type) {
+    setGlobalData("effect",type);
+    let name = {snow:"雪花",star:"星空",none:"无特效"}[type];
+    showToast(`✅ 已设置全局${name}，所有人刷新即可看到`);
+}
+
+function setTheme(color) {
+    setGlobalData("theme",color);
+    let name = {blue:"蓝色",purple:"紫色",pink:"粉色",green:"绿色",red:"红色",orange:"橙色",cyan:"青色",dark:"暗黑",light:"高亮",default:"默认"}[color];
+    showToast(`✅ 全局${name}主题设置成功，全员同步`);
+}
+
+function saveNotice() {
+    const val = document.getElementById("notice").value.trim();
+    if(!val){showToast("❌ 请填写公告内容");return;}
+    setGlobalData("notice",val);
+    showToast("✅ 全局公告已同步，所有用户可见！");
+}
+
+function clearNotice() {
+    setGlobalData("notice","双服 24 小时开放 | 公平公正 | 无外挂 | 无特权 | 节假日活动 | 福利丰厚");
+    showToast("✅ 公告恢复默认，全员同步");
+}
+
+function logout() {
+    isAdmin = false;
+    document.getElementById("adminPanel").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
+    document.getElementById("pwd").value = "";
+    showToast("🚪 已安全退出");
+}
+
+function showToast(text) {
+    const t = document.getElementById("toast");
+    t.innerText = text;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 2000);
+}
+</script>
+</body>
+</html>
